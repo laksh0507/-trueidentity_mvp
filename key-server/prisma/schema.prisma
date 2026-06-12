@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Registered users (epoch-verified phone owners)
+model User {
+  id                String      @id @default(uuid())
+  phone_number      String      @unique
+  epoch_verified_at DateTime    @default(now())
+  status            String      @default("active")
+  created_at        DateTime    @default(now())
+  public_keys       PublicKey[]
+}
+
+// Public keys uploaded from user's device
+// The private key NEVER reaches this server
+model PublicKey {
+  id          String   @id @default(uuid())
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  public_key      String   // PEM-encoded RSA-2048
+  key_fingerprint String   // SHA-256 hash of the public key
+  key_version     Int      @default(1)
+  created_at      DateTime @default(now())
+
+  @@unique([user_id, key_version])
+}
+
+// Every encrypted OTP request is logged
+model OtpAuditLog {
+  id           String   @id @default(uuid())
+  phone_number String
+  bank_id      String
+  sent_at      DateTime @default(now())
+  status       String   @default("SENT")
+}
