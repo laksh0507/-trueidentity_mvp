@@ -2,7 +2,7 @@
 
 **"Bureau.id guesses if fraud happened. TrueIdentity prevents fraud before it happens."**
 
-TrueIdentity is an enterprise-grade telecom identity and authentication infrastructure designed to replace legacy SMS-based OTPs and plain-text phone numbers. By combining **Hardware-Level Cryptography (RSA-2048)** with **Telecom-Level SIM Epoch Binding**, TrueIdentity mathematically eliminates the most dangerous fraud vectors in the world: SIM Swap Fraud, SS7 Interception, and Vishing.
+TrueIdentity is an enterprise-grade telecom identity and authentication infrastructure designed to replace legacy SMS-based OTPs and plain-text phone numbers. By combining **Post-Quantum Cryptography (Kyber-1024 + AES-256-GCM)** with **Telecom-Level SIM Epoch Binding**, TrueIdentity mathematically eliminates the most dangerous fraud vectors in the world: SIM Swap Fraud, SS7 Interception, and Vishing.
 
 ## 🛑 The Industry Problem
 Current authentication systems (like Twilio Authy) and fraud detection tools (like Bureau.id) are fundamentally flawed:
@@ -18,7 +18,7 @@ Current authentication systems (like Twilio Authy) and fraud detection tools (li
 
 ### Pillar 2: TrueIdentity SecureOTP (Anti-Interception)
 3. **The SIM Swap Problem:** We check the exact microsecond the SIM was activated via Telecom APIs (`bound_sim_epoch`). Fraudsters cannot port numbers to intercept messages.
-4. **The SS7 Interception Problem:** OTPs are encrypted via RSA-2048. The SMS travels over the network as unreadable gibberish.
+4. **The SS7 Interception Problem:** OTPs are encrypted via Post-Quantum Kyber-1024 KEM + AES-256-GCM. The SMS travels over the network as unreadable gibberish, mathematically immune even to future quantum computer attacks (Shor's algorithm).
 5. **The Malware Screen-Recording Problem:** We enforce native OS `FLAG_SECURE`. Hackers cannot use malware to screenshot or record the decrypted OTP on the user's screen.
 
 ### Pillar 3: Infrastructure & Adoption (The Enterprise Wedge)
@@ -36,9 +36,9 @@ TrueIdentity is divided into a 3-part ecosystem:
    - Enforces Progressive Adoption fallback routing.
 
 2. **Mobile App (React Native / Expo)**
-   - Generates RSA-2048 keypairs natively on the device.
+   - Generates Kyber-1024 Post-Quantum keypairs natively on the device.
    - Stores the Private Key in the physical hardware chip (iOS Secure Enclave / Android Keystore).
-   - Passively intercepts the `TI:` watermarked SMS, verifies the bank's signature, and decrypts the OTP in a Zero-Touch UI.
+   - Passively intercepts the `TI:` watermarked SMS, verifies the bank's signature, decapsulates the AES key, and decrypts the OTP in a Zero-Touch UI.
 
 3. **Bank SDK (NPM Package)**
    - A drop-in replacement for standard SMS providers (Twilio). 

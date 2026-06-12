@@ -66,13 +66,13 @@ export default function App() {
 
   const handleRegister = async () => {
     setStatus('GENERATING');
-    addLog('Initiating Secure Enclave RSA-2048 key generation...');
+    addLog('Initiating Secure Enclave Kyber-1024 key generation...');
     
     // Simulate slight hardware delay
     setTimeout(async () => {
       const keys = await SecureEnclave.generateKeys();
-      addLog('Keys generated. Private Key locked in Enclave.');
-      addLog('Public Key registered with TrueIdentity Server.');
+      addLog('Post-Quantum Keys generated. Private Key locked in Enclave.');
+      addLog('Kyber Public Key registered with TrueIdentity Server.');
       setStatus('READY');
     }, 1500);
   };
@@ -115,7 +115,7 @@ export default function App() {
         {status === 'GENERATING' && (
           <View style={styles.card}>
             <ActivityIndicator size="large" color="#00ffcc" />
-            <Text style={styles.generatingText}>Generating RSA-2048 Keypair...</Text>
+            <Text style={styles.generatingText}>Generating Kyber-1024 Keypair...</Text>
           </View>
         )}
 
